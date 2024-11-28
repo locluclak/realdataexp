@@ -15,11 +15,17 @@ def run(iter = 0):
     ns = 100
     nt = 20
 
-    # Xs, Ys = _heartfailure.larger50(ns)
-    # Xt, Yt = _heartfailure.undereq50(nt)
+    Xs, Ys = _heartfailure.larger50(ns)
+    Xt, Yt = _heartfailure.undereq50(nt)
 
-    Xs, Ys = _seoulbike.no_holiday(ns)
-    Xt, Yt = _seoulbike.holiday(nt)
+    # Xs, Ys = _seoulbike.no_holiday(ns)
+    # Xt, Yt = _seoulbike.holiday(nt)
+
+    # Xs, Ys = _walmart.Walmart_sales_noholiday(ns)
+    # Xt, Yt = _walmart.Walmart_sales_holiday(nt)
+
+    # Xs, Ys = _co2.other_fuel(ns)
+    # Xt, Yt = _co2.gasoline_fuel(nt)
     p = Xs.shape[1]
 
     Bs = np.dot(np.dot(np.linalg.inv(np.dot(Xs.T, Xs)), Xs.T) , Ys)
