@@ -1,5 +1,5 @@
 import numpy as np
-from gendata import generate
+# from gendata import generate
 import OptimalTransport
 import ForwardSelection as FS
 import overconditioning 
@@ -25,16 +25,16 @@ def compute_p_value(intervals, etaT_Y, etaT_Sigma_eta):
     # compute two-sided selective p_value
     return 2 * min(cdf, 1 - cdf)
 
-def pvalue_SI(seed, n, p, true_betaT):
+def pvalue_SI(seed, n, p, X, Y, Sigma):
     """Return final p_value"""
     np.random.seed(seed)
 
     # Generate data
-    Xs, X, Ys, Y, Sigma_s, Sigma = generate(1, n, p, true_betaT, true_betaT)
+    # Xs, X, Ys, Y, Sigma_s, Sigma = generate(1, n, p, true_betaT, true_betaT)
     # print(X)
     # print(Y)
     # Best model from 1...p models by AIC criterion
-    SELECTION_F = FS.SelectionAdjR2(Y, X)
+    SELECTION_F = FS.SelectionAIC(Y, X, Sigma)
     k = 3
     # SELECTION_F = FS.fixedSelection(Y, X, k)[0]
     X_M = X[:, sorted(SELECTION_F)].copy()

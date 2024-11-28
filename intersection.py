@@ -23,10 +23,12 @@ class Obj:
 
 def solve_quadratic_inequality(a, b, c,seed = 0):
     """ ax^2 + bx +c <= 0 """
-    if abs(a) < 1e-15:
+    if abs(a) < 1e-8:
         a = 0
-    # if abs(b) < 1e-19:
-    #     b = 0
+    if abs(b) < 1e-8:
+        b = 0
+    if abs(c) < 1e-8:
+        c = 0
     if a == 0:
         # print(f"b: {b}")
         if b > 0:

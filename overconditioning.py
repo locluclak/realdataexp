@@ -92,7 +92,7 @@ def interval_SFSabs(X, Y, K, lst_SELEC_k, lst_Portho, a, b):
                 Vplus = min(Vplus, temp)
             else:
                 Vminus = max(Vminus, temp)
-    return Vminus, Vplus
+    return [(Vminus, Vplus)]
     # return np.around(Vminus, 10), np.around(Vplus, 10)
 def interval_SFS(X, Y, K, lst_SELEC_k, lst_Portho, a, b):
     n_sample, n_fea = X.shape
@@ -229,7 +229,7 @@ def OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, 
                                     len(SELECTION_F),
                                     lst_SELECk, lst_P,
                                     GAMMA.dot(a), GAMMA.dot(b))
-    print(itvDA, itvFS)
+    # print(f'DA: {itvDA}, FS: {itvFS}')
     finalinterval = intersection.Intersec(itvDA, itvFS) 
     return finalinterval, itvDA, itvFS
 
@@ -238,7 +238,7 @@ def OC_FS_AIC_nonDA(n,a,b,X,Y,Sigma,SELECTION_F):
     lst_SELECk, lst_P = ForwardSelection.list_residualvec(X, Y)
     # print(lst_SELECk)
     itvFS = interval_SFS(X, Y, len(SELECTION_F), lst_SELECk, lst_P, a, b)
-    itvAIC = interval_AdjustedR2(X, Y, lst_P, len(SELECTION_F), a, b, Sigma)
+    itvAIC = interval_AIC(X, Y, lst_P, len(SELECTION_F), a, b, Sigma)
 
     # finalinterval = intersection.Intersec(itvDA, itvFS) 
     finalinterval = intersection.Intersec(itvFS, itvAIC)
