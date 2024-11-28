@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import normalize, StandardScaler
 
 def Walmart_sales_holiday():
-    df = pd.read_csv('\dataset\Walmart_sales_holiday.csv')
+    df = pd.read_csv('dataset/Walmart_sales_holiday.csv')
 
     response = "Weekly_Sales"
     y = df[[response]].to_numpy()
@@ -21,7 +21,7 @@ def Walmart_sales_holiday():
     return X, y
 
 def Walmart_sales_noholiday():
-    df = pd.read_csv('\dataset\Walmart_sales_noholiday.csv')
+    df = pd.read_csv('dataset/Walmart_sales_noholiday.csv')
 
     response = "Weekly_Sales"
     y = df[[response]].to_numpy()

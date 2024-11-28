@@ -25,9 +25,9 @@ def main(st = 0):
     print('False positive rate:', count / max_iteration)
     kstest_pvalue = scipy.stats.kstest(list_p_value, 'uniform').pvalue
     print('Uniform Kstest check:', kstest_pvalue)
-    plt.hist(list_p_value)
+    # plt.hist(list_p_value)
     # Save the histogram
-    plt.savefig('Figure/uniform_hist.png')
+    # plt.savefig('Figure/uniform_hist.png')
     # plt.show()
     return kstest_pvalue
     

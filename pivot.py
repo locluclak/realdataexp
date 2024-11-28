@@ -155,7 +155,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth):
 
     # Compute eta
     jtest = np.random.choice(range(len(SELECTION_F)))
-    print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
+    # print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
 
     e = np.zeros((len(SELECTION_F), 1))
     e[jtest][0] = 1
