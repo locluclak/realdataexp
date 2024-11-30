@@ -13,7 +13,7 @@ def run(iter = 0):
     # seed = 457262911   
     # print("Seed:",seed)
     ns = 100
-    nt = 20
+    nt = 15
 
     Xs, Ys = _heartfailure.larger50(ns)
     Xt, Yt = _heartfailure.undereq50(nt)
@@ -50,7 +50,7 @@ def run(iter = 0):
     k = 3 # k=-1 if choose based criterion
     #___________________________________________________________
 
-    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'OC')
+    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'DS', 'HF')
 
     # pvalue = pivot_nonDA.pvalue_SI(seed, nt, p, Xt, Yt, Sigma_t)
 
@@ -63,7 +63,7 @@ def run(iter = 0):
     return pvalue
 
 if __name__ == "__main__":
-    for i in range(100):
+    for i in range(130):
         # st = time.time()
         print(f'{i}.')
         print(run())

@@ -27,7 +27,7 @@ def compute_p_value(intervals, etaT_Y, etaT_Sigma_eta):
     # compute two-sided selective p_value
     return 2 * min(cdf, 1 - cdf)
 
-def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t):
+def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
     """Return final p_value"""
     np.random.seed(seed)
 
@@ -100,17 +100,17 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t):
     # Naive
     finalinterval = [(-np.inf, np.inf)]  
     p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
-    filename = f'Experiment/fixedK/HF_{'DS'}meth_Hj_{SELECTION_F[jtest]}.txt'
+    filename = f'Experiment/fixedK/{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
     with open(filename, 'a') as f:
         f.write(str(p_value)+ '\n')
     return p_value
 
-def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth):
+def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, dataset):
     """Return final p_value"""
     # np.random.seed(seed)
 
     if meth == 'DS':
-        p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t)
+        p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_{meth}')
 
         return p_value
     # Generate data
@@ -210,7 +210,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth):
         print('wrong! ',seed)
         exit()
         return
-    filename = f'Experiment/fixedK/HF_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
+    filename = f'Experiment/fixedK/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
     with open(filename, 'a') as f:
         f.write(str(selective_p_value)+ '\n')
     return selective_p_value
