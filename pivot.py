@@ -72,10 +72,12 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
     Sigmatilde = GAMMA.T.dot(Sigma.dot(GAMMA))
     # Best model from 1...p models by AIC criterion
     if k == -1:
-        # SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
+        cr = 'AIC'
+        SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
         # SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
-        SELECTION_F = FS.SelectionAdjR2(Ytilde, Xtilde)
+        # SELECTION_F = FS.SelectionAdjR2(Ytilde, Xtilde)
     else:
+        cr = 'fixedK'
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
     
     
@@ -83,27 +85,28 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
 
     # Compute eta
     jtest = np.random.choice(range(len(SELECTION_F)))
-    print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
-    e = np.zeros((len(SELECTION_F), 1))
-    e[jtest][0] = 1
-    
-    # eta constructed on Target data
-    eta = np.dot(e.T , np.dot(np.linalg.inv(np.dot(Xt_M.T, Xt_M)), Xt_M.T) ) 
-    eta = eta.reshape((-1,1))
-    etaT_Sigma_eta = np.dot(np.dot(eta.T , Sigma_t_test) , eta).item()
+    for jtest in range(len(SELECTION_F)):
+        print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
+        e = np.zeros((len(SELECTION_F), 1))
+        e[jtest][0] = 1
+        
+        # eta constructed on Target data
+        eta = np.dot(e.T , np.dot(np.linalg.inv(np.dot(Xt_M.T, Xt_M)), Xt_M.T) ) 
+        eta = eta.reshape((-1,1))
+        etaT_Sigma_eta = np.dot(np.dot(eta.T , Sigma_t_test) , eta).item()
 
-    # Test statistic
-    etaTY = np.dot(eta.T, Yt_test).item()
-    # print(f"etay: {etaTY}")
-    # print(f"Final interval: {finalinterval}")
+        # Test statistic
+        etaTY = np.dot(eta.T, Yt_test).item()
+        # print(f"etay: {etaTY}")
+        # print(f"Final interval: {finalinterval}")
 
-    # Naive
-    finalinterval = [(-np.inf, np.inf)]  
-    p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
-    filename = f'Experiment/AIC/{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
-    with open(filename, 'a') as f:
-        f.write(str(p_value)+ '\n')
-    return p_value
+        # Naive
+        finalinterval = [(-np.inf, np.inf)]  
+        p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
+        filename = f'Experiment/{cr}/{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
+        with open(filename, 'a') as f:
+            f.write(str(p_value)+ '\n')
+    return 0
 
 def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, dataset):
     """Return final p_value"""
@@ -148,69 +151,72 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, datase
         SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
         # SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
         # SELECTION_F = FS.SelectionAdjR2(Ytilde, Xtilde)
+        cr = 'AIC'
     else:
+        cr = 'fixedK'
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
     # print(SELECTION_F)
     Xt_M = Xt[:, sorted(SELECTION_F)].copy()
 
     # Compute eta
-    jtest = np.random.choice(range(len(SELECTION_F)))
+    # jtest = np.random.choice(range(len(SELECTION_F)))
     # print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
+    for jtest in range(len(SELECTION_F)):
+        e = np.zeros((len(SELECTION_F), 1))
+        e[jtest][0] = 1
 
-    e = np.zeros((len(SELECTION_F), 1))
-    e[jtest][0] = 1
+        # Zeta cut off source data in Y
+        Zeta = np.concatenate((np.zeros((nt, ns)), np.identity(nt)), axis = 1)
+        
+        # eta constructed on Target data
+        eta = np.dot(e.T , np.dot(np.dot(np.linalg.inv(np.dot(Xt_M.T, Xt_M)), Xt_M.T), Zeta)) 
+        eta = eta.reshape((-1,1))
+        etaT_Sigma_eta = np.dot(np.dot(eta.T , Sigma) , eta).item()
+        
+        # Change y = a + bz
+        I_nplusm = np.identity(ns+nt)
+        b = np.dot(Sigma, eta) / etaT_Sigma_eta
+        a = np.dot((I_nplusm - np.dot(b, eta.T)), Y)
 
-    # Zeta cut off source data in Y
-    Zeta = np.concatenate((np.zeros((nt, ns)), np.identity(nt)), axis = 1)
-    
-    # eta constructed on Target data
-    eta = np.dot(e.T , np.dot(np.dot(np.linalg.inv(np.dot(Xt_M.T, Xt_M)), Xt_M.T), Zeta)) 
-    eta = eta.reshape((-1,1))
-    etaT_Sigma_eta = np.dot(np.dot(eta.T , Sigma) , eta).item()
-    
-    # Change y = a + bz
-    I_nplusm = np.identity(ns+nt)
-    b = np.dot(Sigma, eta) / etaT_Sigma_eta
-    a = np.dot((I_nplusm - np.dot(b, eta.T)), Y)
+        # Test statistic
+        etaTY = np.dot(eta.T, Y).item()
+        
+        if meth == 'para':
+            if k == -1:
+                finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
+                # finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
+            else:
+                finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
+                # finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
+        if meth == 'OC':
+            if k == -1:
+                # finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
+                finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
+            else:
+                # finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
+                finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
+        if meth == 'bonf':
+            # Naive
+            finalinterval = [(-np.inf, np.inf)]
+        # print(f"etay: {etaTY}")
+        # print(f"Final interval: {finalinterval}")
+        
 
-    # Test statistic
-    etaTY = np.dot(eta.T, Y).item()
-    
-    if meth == 'para':
-        if k == -1:
-            finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
-            # finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
-        else:
-            finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
-            # finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
-    if meth == 'OC':
-        if k == -1:
-            # finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
-            finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
-        else:
-            # finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
-            finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
-    if meth == 'bonf':
-        # Naive
-        finalinterval = [(-np.inf, np.inf)]
-    # print(f"etay: {etaTY}")
-    # print(f"Final interval: {finalinterval}")
-    
-
-    selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
-    if meth == 'bonf':
-        if k == -1:
-            selective_p_value *= p*2**(p-1)
-        else:
-            from math import comb
-            selective_p_value *= k*comb(p,k)
-        if selective_p_value > 1:
-            selective_p_value = 1
-    if selective_p_value == 999:
-        print('wrong! ',seed)
-        exit()
-        return
-    filename = f'Experiment/AIC/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
-    with open(filename, 'a') as f:
-        f.write(str(selective_p_value)+ '\n')
-    return selective_p_value
+        selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
+        if meth == 'bonf':
+            if k == -1:
+                selective_p_value *= p*2**(p-1)
+            else:
+                from math import comb
+                selective_p_value *= k*comb(p,k)
+            if selective_p_value > 1:
+                selective_p_value = 1
+        if selective_p_value == 999:
+            print('wrong! ',seed)
+            exit()
+            return
+        filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
+        with open(filename, 'a') as f:
+            f.write(str(selective_p_value)+ '\n')
+        # return selective_p_value
+    return 0

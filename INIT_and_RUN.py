@@ -29,12 +29,11 @@ def run(iter = 0):
     p = Xs.shape[1]
 
     Bs = np.dot(np.dot(np.linalg.inv(np.dot(Xs.T, Xs)), Xs.T) , Ys)
-    try:
-        # avoid singular matrix
-        Bt = np.dot(np.dot(np.linalg.inv(np.dot(Xt.T, Xt)), Xt.T) , Yt)
-    except:
-        Xt = Xt + 0.0005*np.identity(nt)
-        Bt = np.dot(np.dot(np.linalg.inv(np.dot(Xt.T, Xt)), Xt.T) , Yt)
+
+    # avoid singular matrix
+    Xt = Xt + 0.0005
+    Bt = np.dot(np.dot(np.linalg.inv(np.dot(Xt.T, Xt)), Xt.T) , Yt)
+
     Ys_ = Xs.dot(Bs)
     Yt_ = Xt.dot(Bt)
     var_s = 1/(ns - p) * (Ys - Ys_).T.dot(Ys - Ys_)
@@ -63,7 +62,7 @@ def run(iter = 0):
     return pvalue
 
 if __name__ == "__main__":
-    for i in range(130):
+    for i in range(50):
         # st = time.time()
         print(f'{i}.')
         print(run())
