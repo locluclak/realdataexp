@@ -108,7 +108,7 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
             f.write(str(p_value)+ '\n')
     return 0
 
-def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, dataset):
+def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, meth = 'bonfOCpara'):
     """Return final p_value"""
     # np.random.seed(seed)
 
@@ -157,7 +157,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, datase
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
     # print(SELECTION_F)
     Xt_M = Xt[:, sorted(SELECTION_F)].copy()
-
+    meths = ['bonf', 'OC']
     # Compute eta
     # jtest = np.random.choice(range(len(SELECTION_F)))
     # print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
@@ -180,43 +180,43 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, meth, datase
 
         # Test statistic
         etaTY = np.dot(eta.T, Y).item()
-        
-        if meth == 'para':
-            if k == -1:
-                finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
-                # finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
-            else:
-                finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
-                # finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
-        if meth == 'OC':
-            if k == -1:
-                # finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
-                finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
-            else:
-                # finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
-                finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
-        if meth == 'bonf':
-            # Naive
-            finalinterval = [(-np.inf, np.inf)]
-        # print(f"etay: {etaTY}")
-        # print(f"Final interval: {finalinterval}")
-        
+        for meth in meths:
+            if meth == 'para':
+                if k == -1:
+                    finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
+                    # finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
+                else:
+                    finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
+                    # finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
+            if meth == 'OC':
+                if k == -1:
+                    # finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
+                    finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
+                else:
+                    # finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
+                    finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
+            if meth == 'bonf':
+                # Naive
+                finalinterval = [(-np.inf, np.inf)]
+            # print(f"etay: {etaTY}")
+            # print(f"Final interval: {finalinterval}")
+            
 
-        selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
-        if meth == 'bonf':
-            if k == -1:
-                selective_p_value *= p*2**(p-1)
-            else:
-                from math import comb
-                selective_p_value *= k*comb(p,k)
-            if selective_p_value > 1:
-                selective_p_value = 1
-        if selective_p_value == 999:
-            print('wrong! ',seed)
-            exit()
-            return
-        filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
-        with open(filename, 'a') as f:
-            f.write(str(selective_p_value)+ '\n')
-        # return selective_p_value
+            selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
+            if meth == 'bonf':
+                if k == -1:
+                    selective_p_value *= p*2**(p-1)
+                else:
+                    from math import comb
+                    selective_p_value *= k*comb(p,k)
+                if selective_p_value > 1:
+                    selective_p_value = 1
+            if selective_p_value == 999:
+                print('wrong! ',seed)
+                exit()
+                return
+            filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
+            with open(filename, 'a') as f:
+                f.write(str(selective_p_value)+ '\n')
+            # return selective_p_value
     return 0

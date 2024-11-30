@@ -5,9 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from math import comb
-
+import time
 def main(st = 0):
-    max_iteration = 46
+    max_iteration = 64
     list_p_value = []
     # ssize = 50
     alpha = 0.05  # / (5*2**4)# / (3*comb(5,3)) 
@@ -38,6 +38,8 @@ if __name__ == "__main__":
     os.environ["NUMEXPR_NUM_THREADS"] = "1" 
     os.environ["OMP_NUM_THREADS"] = "1" 
     loop = 1
+    st = time.time()
     for i in range(loop):
         # print(f"Loop {i+1}/{loop}")
         kstest = main()
+    print(f'Take {time.time() - st} (s)')

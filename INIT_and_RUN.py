@@ -15,11 +15,11 @@ def run(iter = 0):
     ns = 100
     nt = 15
 
-    Xs, Ys = _heartfailure.larger50(ns)
-    Xt, Yt = _heartfailure.undereq50(nt)
+    # Xs, Ys = _heartfailure.larger50(ns)
+    # Xt, Yt = _heartfailure.undereq50(nt)
 
-    # Xs, Ys = _seoulbike.no_holiday(ns)
-    # Xt, Yt = _seoulbike.holiday(nt)
+    Xs, Ys = _seoulbike.no_holiday(ns)
+    Xt, Yt = _seoulbike.holiday(nt)
 
     # Xs, Ys = _walmart.Walmart_sales_noholiday(ns)
     # Xt, Yt = _walmart.Walmart_sales_holiday(nt)
@@ -49,7 +49,7 @@ def run(iter = 0):
     k = -1 # k=-1 if choose based criterion
     #___________________________________________________________
 
-    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'OC', 'HF')
+    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'SB', 'DS')
 
     # pvalue = pivot_nonDA.pvalue_SI(seed, nt, p, Xt, Yt, Sigma_t)
 
