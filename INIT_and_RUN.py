@@ -47,10 +47,10 @@ def run(iter = 0):
     # betat = 4
     # true_beta_s = np.full((p,1), 2) #source's beta
     # true_beta_t = np.full((p,1), betat) #target's beta
-    k = 3 # k=-1 if choose based criterion
+    k = -1 # k=-1 if choose based criterion
     #___________________________________________________________
 
-    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'DS', 'HF')
+    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'OC', 'HF')
 
     # pvalue = pivot_nonDA.pvalue_SI(seed, nt, p, Xt, Yt, Sigma_t)
 
