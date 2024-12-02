@@ -110,7 +110,7 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
 
 def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, meth = 'bonfOCpara'):
     """Return final p_value"""
-    # np.random.seed(seed)
+    np.random.seed(seed)
 
     if meth == 'DS':
         p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_{meth}')
@@ -157,11 +157,13 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
     # print(SELECTION_F)
     Xt_M = Xt[:, sorted(SELECTION_F)].copy()
-    meths = ['bonf', 'OC']
+    meths = ['para']
     # Compute eta
     # jtest = np.random.choice(range(len(SELECTION_F)))
     # print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
     for jtest in range(len(SELECTION_F)):
+        print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
+
         e = np.zeros((len(SELECTION_F), 1))
         e[jtest][0] = 1
 
@@ -198,8 +200,8 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
             if meth == 'bonf':
                 # Naive
                 finalinterval = [(-np.inf, np.inf)]
-            # print(f"etay: {etaTY}")
-            # print(f"Final interval: {finalinterval}")
+            print(f"etay: {etaTY}")
+            print(f"Final interval: {finalinterval}")
             
 
             selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
@@ -216,7 +218,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
                 exit()
                 return
             filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
-            with open(filename, 'a') as f:
-                f.write(str(selective_p_value)+ '\n')
+            # with open(filename, 'a') as f:
+            #     f.write(str(selective_p_value)+ '\n')
             # return selective_p_value
     return 0

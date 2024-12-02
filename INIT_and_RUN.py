@@ -7,10 +7,12 @@ import _heartfailure
 import _seoulbike
 import _walmart
 import _co2
+import _diabetes
+
 global seed
 def run(iter = 0):    
     seed = int(np.random.rand() * (2**32 - 1))
-    # seed = 457262911   
+    seed = 3358048681   
     # print("Seed:",seed)
     ns = 100
     nt = 15
@@ -20,6 +22,9 @@ def run(iter = 0):
 
     Xs, Ys = _seoulbike.no_holiday(ns)
     Xt, Yt = _seoulbike.holiday(nt)
+
+    # Xs, Ys = _diabetes.undereq50(ns)
+    # Xt, Yt = _diabetes.larger50(nt)
 
     # Xs, Ys = _walmart.Walmart_sales_noholiday(ns)
     # Xt, Yt = _walmart.Walmart_sales_holiday(nt)
@@ -46,10 +51,10 @@ def run(iter = 0):
     # betat = 4
     # true_beta_s = np.full((p,1), 2) #source's beta
     # true_beta_t = np.full((p,1), betat) #target's beta
-    k = -1 # k=-1 if choose based criterion
+    k = 5 # k=-1 if choose based criterion
     #___________________________________________________________
 
-    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'SB', 'DS')
+    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'SB')#, 'DS')
 
     # pvalue = pivot_nonDA.pvalue_SI(seed, nt, p, Xt, Yt, Sigma_t)
 
@@ -62,7 +67,7 @@ def run(iter = 0):
     return pvalue
 
 if __name__ == "__main__":
-    for i in range(50):
+    for i in range(1):
         # st = time.time()
         print(f'{i}.')
         print(run())
