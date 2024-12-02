@@ -181,7 +181,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
         a = np.dot((I_nplusm - np.dot(b, eta.T)), Y)
 
         # Test statistic
-        etaTY = np.dot(eta.T, Y).item()
+        etaTY = np.around(np.dot(eta.T, Y).item(), 10)
         for meth in meths:
             if meth == 'para':
                 if k == -1:

@@ -59,8 +59,8 @@ def para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F):
     TD = []
     detectedinter = []
     # print(f'M = {SELECTION_F}')
-    z =  -20
-    zmax = 20
+    z =  -1
+    zmax = 1
     countitv = 0
     while z < zmax:
         z += 0.0001
@@ -72,7 +72,7 @@ def para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F):
                 break
         if z > zmax:
             break
-        # print(z)
+        print(z)
         Ydeltaz = a + b*z
 
         XsXt_deltaz = np.concatenate((X, Ydeltaz), axis= 1).copy()
@@ -103,6 +103,8 @@ def para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F):
 
         # print(SELECTIONinloop)
         # print(f"Matched - fs: {itvfs} - da: {itvda}")
+        # print(f"intervalinloop: {intervalinloop}")
+
         TD = intersection.Union(TD, intervalinloop)
     # filename = f'Experiment/fixedk_numberitv_{ns}.txt'
     # with open(filename, 'a') as f:

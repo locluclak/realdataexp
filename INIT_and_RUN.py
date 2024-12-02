@@ -12,9 +12,9 @@ import _diabetes
 global seed
 def run(iter = 0):    
     seed = int(np.random.rand() * (2**32 - 1))
-    seed = 3358048681   
+    # seed = 3358048681   
     # print("Seed:",seed)
-    ns = 100
+    ns = 50
     nt = 15
 
     # Xs, Ys = _heartfailure.larger50(ns)
