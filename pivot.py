@@ -108,14 +108,13 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
             f.write(str(p_value)+ '\n')
     return 0
 
-def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, meth = 'bonfOCpara'):
+def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, meth = 'DSbonfOCpara'):
     """Return final p_value"""
     np.random.seed(seed)
 
-    if meth == 'DS':
-        p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_{meth}')
 
-        return p_value
+    p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_{'DS'}')
+
     # Generate data
     # Xs, Xt, Ys, Yt, Sigma_s, Sigma_t = generate(ns, nt, p, true_betaS, true_betaT)
 
@@ -157,7 +156,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
     # print(SELECTION_F)
     Xt_M = Xt[:, sorted(SELECTION_F)].copy()
-    meths = ['para']
+    meths = ['bonf', 'OC','para']
     # Compute eta
     # jtest = np.random.choice(range(len(SELECTION_F)))
     # print(f'[p]: {list(range(p))}, M: {SELECTION_F}, select: {SELECTION_F[jtest]}')
@@ -200,8 +199,8 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
             if meth == 'bonf':
                 # Naive
                 finalinterval = [(-np.inf, np.inf)]
-            print(f"etay: {etaTY}")
-            print(f"Final interval: {finalinterval}")
+            # print(f"etay: {etaTY}")
+            # print(f"Final interval: {finalinterval}")
             
 
             selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
@@ -218,7 +217,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
                 exit()
                 return
             filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
-            # with open(filename, 'a') as f:
-            #     f.write(str(selective_p_value)+ '\n')
+            with open(filename, 'a') as f:
+                f.write(str(selective_p_value)+ '\n')
             # return selective_p_value
     return 0

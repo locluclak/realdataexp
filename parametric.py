@@ -59,8 +59,8 @@ def para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F):
     TD = []
     detectedinter = []
     # print(f'M = {SELECTION_F}')
-    z =  -1
-    zmax = 1
+    z =  -20
+    zmax = 20
     countitv = 0
     while z < zmax:
         z += 0.0001
@@ -72,7 +72,7 @@ def para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F):
                 break
         if z > zmax:
             break
-        print(z)
+        # print(z)
         Ydeltaz = a + b*z
 
         XsXt_deltaz = np.concatenate((X, Ydeltaz), axis= 1).copy()

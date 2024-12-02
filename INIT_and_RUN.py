@@ -14,23 +14,29 @@ def run(iter = 0):
     seed = int(np.random.rand() * (2**32 - 1))
     # seed = 3358048681   
     # print("Seed:",seed)
-    ns = 50
+    ns = 100
     nt = 15
 
     # Xs, Ys = _heartfailure.larger50(ns)
     # Xt, Yt = _heartfailure.undereq50(nt)
+    # datasetname = 'HF'
+    
+    # Xs, Ys = _seoulbike.no_holiday(ns)
+    # Xt, Yt = _seoulbike.holiday(nt)
+    # datasetname = 'SB'
 
-    Xs, Ys = _seoulbike.no_holiday(ns)
-    Xt, Yt = _seoulbike.holiday(nt)
-
-    # Xs, Ys = _diabetes.undereq50(ns)
-    # Xt, Yt = _diabetes.larger50(nt)
+    Xs, Ys = _diabetes.undereq50(ns)
+    Xt, Yt = _diabetes.larger50(nt)
+    datasetname = 'DB'
 
     # Xs, Ys = _walmart.Walmart_sales_noholiday(ns)
     # Xt, Yt = _walmart.Walmart_sales_holiday(nt)
+    # datasetname = 'WM'
 
     # Xs, Ys = _co2.other_fuel(ns)
     # Xt, Yt = _co2.gasoline_fuel(nt)
+    # datasetname = 'CO2'
+
     p = Xs.shape[1]
 
     Bs = np.dot(np.dot(np.linalg.inv(np.dot(Xs.T, Xs)), Xs.T) , Ys)
@@ -54,7 +60,7 @@ def run(iter = 0):
     k = 5 # k=-1 if choose based criterion
     #___________________________________________________________
 
-    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, 'SB')#, 'DS')
+    pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset=datasetname)#, 'DS')
 
     # pvalue = pivot_nonDA.pvalue_SI(seed, nt, p, Xt, Yt, Sigma_t)
 
