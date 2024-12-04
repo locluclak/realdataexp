@@ -15,7 +15,7 @@ def run(iter = 0):
     # seed = 440929087   
     # print("Seed:",seed)
     ns = 100
-    nt = 20
+    nt = 15
 
     # Xs, Ys = _heartfailure.larger50(ns, seed)
     # Xt, Yt = _heartfailure.undereq50(nt, seed)
