@@ -113,7 +113,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
     np.random.seed(seed)
 
 
-    p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_{'DS'}')
+    p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_DS')
 
     # Generate data
     # Xs, Xt, Ys, Yt, Sigma_s, Sigma_t = generate(ns, nt, p, true_betaS, true_betaT)
