@@ -12,15 +12,14 @@ import time
 
 def compute_p_value(intervals, etaT_Y, etaT_Sigma_eta):
     denominator = 0
-    numerator = None
+    numerator = 0
 
     for i in intervals:
         leftside, rightside = i
         if leftside <= etaT_Y <= rightside:
             numerator = denominator + mp.ncdf(etaT_Y / np.sqrt(etaT_Sigma_eta)) - mp.ncdf(leftside / np.sqrt(etaT_Sigma_eta))
         denominator += mp.ncdf(rightside / np.sqrt(etaT_Sigma_eta)) - mp.ncdf(leftside / np.sqrt(etaT_Sigma_eta))
-    if numerator is None:
-        return 999
+
     # print(f'etaT sigma eta = {denominator}')
     cdf = float(numerator / denominator)
     # print(cdf)
@@ -212,12 +211,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
                     selective_p_value *= k*comb(p,k)
                 if selective_p_value > 1:
                     selective_p_value = 1
-            if selective_p_value == 999:
-                print('wrong! ',seed)
-                print(f"etay: {etaTY}")
-                print(f"Final interval: {finalinterval}") 
-                exit()
-                return
+
             filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'
             with open(filename, 'a') as f:
                 f.write(str(selective_p_value)+ '\n')
