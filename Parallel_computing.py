@@ -7,7 +7,7 @@ import os
 from math import comb
 import time
 def main(st = 0):
-    max_iteration = 64
+    max_iteration = 70
     list_p_value = []
     # ssize = 50
     alpha = 0.05  # / (5*2**4)# / (3*comb(5,3)) 

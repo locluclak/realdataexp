@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np 
 from sklearn.preprocessing import normalize, StandardScaler
 
-def gasoline_fuel():
+def gasoline_fuel(num=20,seed=-1):
+    if seed != -1:
+        np.random.seed(seed)
     df = pd.read_csv('gasoline_fuel.csv')
 
     response = "CO2 Emissions(g/km)"
@@ -18,7 +20,9 @@ def gasoline_fuel():
     X = X[indexes, :].copy()
     return X, y
 
-def other_fuel():
+def other_fuel(num=100,seed=-1):
+    if seed != -1:
+        np.random.seed(seed)
     df = pd.read_csv('other_fuel.csv')
 
     response = "CO2 Emissions(g/km)"

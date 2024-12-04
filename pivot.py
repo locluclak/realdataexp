@@ -214,6 +214,8 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
                     selective_p_value = 1
             if selective_p_value == 999:
                 print('wrong! ',seed)
+                print(f"etay: {etaTY}")
+                print(f"Final interval: {finalinterval}") 
                 exit()
                 return
             filename = f'Experiment/{cr}/{dataset}_{meth}meth_Hj_{SELECTION_F[jtest]}.txt'

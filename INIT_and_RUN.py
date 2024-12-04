@@ -17,24 +17,24 @@ def run(iter = 0):
     ns = 100
     nt = 15
 
-    # Xs, Ys = _heartfailure.larger50(ns)
-    # Xt, Yt = _heartfailure.undereq50(nt)
+    # Xs, Ys = _heartfailure.larger50(ns, seed)
+    # Xt, Yt = _heartfailure.undereq50(nt, seed)
     # datasetname = 'HF'
     
-    # Xs, Ys = _seoulbike.no_holiday(ns)
-    # Xt, Yt = _seoulbike.holiday(nt)
+    # Xs, Ys = _seoulbike.no_holiday(ns, seed)
+    # Xt, Yt = _seoulbike.holiday(nt, seed)
     # datasetname = 'SB'
 
-    Xs, Ys = _diabetes.undereq50(ns)
-    Xt, Yt = _diabetes.larger50(nt)
+    Xs, Ys = _diabetes.undereq50(ns, seed)
+    Xt, Yt = _diabetes.larger50(nt, seed)
     datasetname = 'DB'
 
-    # Xs, Ys = _walmart.Walmart_sales_noholiday(ns)
-    # Xt, Yt = _walmart.Walmart_sales_holiday(nt)
+    # Xs, Ys = _walmart.Walmart_sales_noholiday(ns, seed)
+    # Xt, Yt = _walmart.Walmart_sales_holiday(nt, seed)
     # datasetname = 'WM'
 
-    # Xs, Ys = _co2.other_fuel(ns)
-    # Xt, Yt = _co2.gasoline_fuel(nt)
+    # Xs, Ys = _co2.other_fuel(ns, seed)
+    # Xt, Yt = _co2.gasoline_fuel(nt, seed)
     # datasetname = 'CO2'
 
     p = Xs.shape[1]
@@ -57,7 +57,7 @@ def run(iter = 0):
     # betat = 4
     # true_beta_s = np.full((p,1), 2) #source's beta
     # true_beta_t = np.full((p,1), betat) #target's beta
-    k = 5 # k=-1 if choose based criterion
+    k = -1 # k=-1 if choose based criterion
     #___________________________________________________________
 
     pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset=datasetname)#, 'DS')
