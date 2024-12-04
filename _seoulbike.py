@@ -22,7 +22,9 @@ def holiday(num=20,seed=-1):
     X = X[indexes, :].copy()
     return X, y
 
-def no_holiday(num=100):
+def no_holiday(num=100, seed =-1):
+    if seed != -1:
+        np.random.seed(seed)    
     df = pd.read_csv('dataset/SeoulBikeNoHoliday_dataset.csv')
 
     response = "Rented Bike Count"
