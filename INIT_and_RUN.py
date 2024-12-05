@@ -19,23 +19,23 @@ def run(iter = 0):
 
     # Xs, Ys = _heartfailure.larger50(ns, seed)
     # Xt, Yt = _heartfailure.undereq50(nt, seed)
-    # datasetname = 'HF'
+    # datasetname = 'HF' # k = 3
     
     # Xs, Ys = _seoulbike.no_holiday(ns, seed)
     # Xt, Yt = _seoulbike.holiday(nt, seed)
-    # datasetname = 'SB'
+    # datasetname = 'SB' # k = 5
 
     Xs, Ys = _diabetes.undereq50(ns, seed)
     Xt, Yt = _diabetes.larger50(nt, seed)
-    datasetname = 'DB'
+    datasetname = 'DB' # k = 6
 
     # Xs, Ys = _walmart.Walmart_sales_noholiday(ns, seed)
     # Xt, Yt = _walmart.Walmart_sales_holiday(nt, seed)
-    # datasetname = 'WM'
+    # datasetname = 'WM' # k = 3
 
     # Xs, Ys = _co2.other_fuel(ns, seed)
     # Xt, Yt = _co2.gasoline_fuel(nt, seed)
-    # datasetname = 'CO2'
+    # datasetname = 'CO2' # k = 4
 
     p = Xs.shape[1]
 
