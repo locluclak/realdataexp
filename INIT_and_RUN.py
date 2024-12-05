@@ -57,7 +57,7 @@ def run(iter = 0):
     # betat = 4
     # true_beta_s = np.full((p,1), 2) #source's beta
     # true_beta_t = np.full((p,1), betat) #target's beta
-    k = -1 # k=-1 if choose based criterion
+    k = 6 # k=-1 if choose based criterion
     #___________________________________________________________
 
     pvalue = pivot.pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset=datasetname)#, 'DS')
