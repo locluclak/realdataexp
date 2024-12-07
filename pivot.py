@@ -71,9 +71,9 @@ def pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,meth):
     Sigmatilde = GAMMA.T.dot(Sigma.dot(GAMMA))
     # Best model from 1...p models by AIC criterion
     if k == -1:
-        cr = 'AIC'
-        SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
-        # SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
+        cr = 'BIC'
+        # SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
+        SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
         # SELECTION_F = FS.SelectionAdjR2(Ytilde, Xtilde)
     else:
         cr = 'fixedK'
@@ -146,10 +146,10 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
     Sigmatilde = GAMMA.T.dot(Sigma.dot(GAMMA))
    
     if k == -1:
-        SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
-        # SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
+        # SELECTION_F = FS.SelectionAIC(Ytilde, Xtilde, Sigmatilde)
+        SELECTION_F = FS.SelectionBIC(Ytilde, Xtilde, Sigmatilde)
         # SELECTION_F = FS.SelectionAdjR2(Ytilde, Xtilde)
-        cr = 'AIC'
+        cr = 'BIC'
     else:
         cr = 'fixedK'
         SELECTION_F = FS.fixedSelection(Ytilde, Xtilde, k)[0]
