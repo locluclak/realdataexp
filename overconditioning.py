@@ -198,15 +198,21 @@ def interval_AdjustedR2(X, Y, Portho, K, a, b, Sigma, seed = 0):
 
             intervals = intersection.Intersec(intervals, itv)
     return intervals 
-def OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, h_, SELECTION_F, GAMMA,seed = 0):
+def OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, h_, SELECTION_F, GAMMA,seed = 0, meth = 'para'):
 
     lst_SELECk, lst_P = ForwardSelection.list_residualvec(Xtilde, Ytilde)
 
     itvDA = interval_DA(ns, nt, XsXt_, B, S_, h_, a, b)
-    itvFS = interval_SFS(Xtilde, Ytilde, 
+    if meth == 'OC':
+        itvFS = interval_SFSabs(Xtilde, Ytilde,
                                     len(SELECTION_F),
-                                    lst_SELECk, lst_P,
+                                    lst_SELEC_k, lst_P, 
                                     GAMMA.dot(a), GAMMA.dot(b))
+    else:
+        itvFS = interval_SFS(Xtilde, Ytilde, 
+                                        len(SELECTION_F),
+                                        lst_SELECk, lst_P,
+                                        GAMMA.dot(a), GAMMA.dot(b))
     itvCriterion = interval_AIC(Xtilde, Ytilde, 
                                         lst_P, len(SELECTION_F), 
                                         GAMMA.dot(a), GAMMA.dot(b), Sigmatilde, seed)
@@ -220,15 +226,21 @@ def OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, h_,
     finalinterval = intersection.Intersec(finalinterval, itvCriterion)
     # print(f"da: {itvDA} | fs: {itvFS} | aic: {itvCriterion}")
     return finalinterval
-def OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, h_, SELECTION_F, GAMMA,):
+def OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, B, S_, h_, SELECTION_F, GAMMA,meth):
 
     lst_SELECk, lst_P = ForwardSelection.list_residualvec(Xtilde, Ytilde)
 
     itvDA = interval_DA(ns, nt, XsXt_, B, S_, h_, a, b)
-    itvFS = interval_SFS(Xtilde, Ytilde, 
+    if meth == 'OC':
+        itvFS = interval_SFSabs(Xtilde, Ytilde,
                                     len(SELECTION_F),
-                                    lst_SELECk, lst_P,
+                                    lst_SELEC_k, lst_P, 
                                     GAMMA.dot(a), GAMMA.dot(b))
+    else:
+        itvFS = interval_SFS(Xtilde, Ytilde, 
+                                        len(SELECTION_F),
+                                        lst_SELECk, lst_P,
+                                        GAMMA.dot(a), GAMMA.dot(b))
     # print(f'DA: {itvDA}, FS: {itvFS}')
     finalinterval = intersection.Intersec(itvDA, itvFS) 
     return finalinterval, itvDA, itvFS

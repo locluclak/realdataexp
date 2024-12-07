@@ -113,7 +113,7 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
 
 
     p_value = pvalue_DS(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t,f'{dataset}_DS')
-
+    return 0
     # Generate data
     # Xs, Xt, Ys, Yt, Sigma_s, Sigma_t = generate(ns, nt, p, true_betaS, true_betaT)
 
@@ -191,15 +191,17 @@ def pvalue_SI(seed, ns, nt, p, k, Xs, Xt, Ys, Yt, Sigma_s, Sigma_t, dataset, met
             if meth == 'OC':
                 if k == -1:
                     # finalinterval = parametric.para_DA_FSwithAIC(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,seed)
-                    finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)
+                    finalinterval = overconditioning.OC_Crit_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, 
+                                                    Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA,meth='OC')
                 else:
                     # finalinterval = parametric.para_DA_FSwithfixedK(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F)
-                    finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde, Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA)[0]
+                    finalinterval = overconditioning.OC_fixedFS_interval(ns, nt, a, b, XsXt_, Xtilde, Ytilde,
+                                                     Sigmatilde, basis_var, S_, h_, SELECTION_F, GAMMA, 'OC')[0]
             if meth == 'bonf':
                 # Naive
                 finalinterval = [(-np.inf, np.inf)]
-            # print(f"etay: {etaTY}")
-            # print(f"Final interval: {finalinterval}")
+            print(f"etay: {etaTY}")
+            print(f"Final interval: {finalinterval}")
             
 
             selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)

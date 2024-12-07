@@ -5,7 +5,7 @@ from sklearn.preprocessing import normalize, StandardScaler
 def gasoline_fuel(num=20,seed=-1):
     if seed != -1:
         np.random.seed(seed)
-    df = pd.read_csv('gasoline_fuel.csv')
+    df = pd.read_csv('dataset/CO2_gasoline_fuel.csv')
 
     response = "CO2 Emissions(g/km)"
     y = df[[response]].to_numpy()
@@ -13,7 +13,7 @@ def gasoline_fuel(num=20,seed=-1):
 
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
-    y = scaler.fit_transform(y)
+    # y = scaler.fit_transform(y)
 
     indexes = np.random.choice(y.shape[0], size=num)
     y = y[indexes, :].copy()
@@ -23,7 +23,7 @@ def gasoline_fuel(num=20,seed=-1):
 def other_fuel(num=100,seed=-1):
     if seed != -1:
         np.random.seed(seed)
-    df = pd.read_csv('other_fuel.csv')
+    df = pd.read_csv('dataset/CO2_other_fuel.csv')
 
     response = "CO2 Emissions(g/km)"
     y = df[[response]].to_numpy()
@@ -31,7 +31,7 @@ def other_fuel(num=100,seed=-1):
 
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
-    y = scaler.fit_transform(y)
+    # y = scaler.fit_transform(y)
 
     indexes = np.random.choice(y.shape[0], size=num)
     y = y[indexes, :].copy()
@@ -39,4 +39,4 @@ def other_fuel(num=100,seed=-1):
     return X, y
 
 if __name__ == "__main__":
-    print(other_fuel()[1])
+    print(other_fuel()[0])
